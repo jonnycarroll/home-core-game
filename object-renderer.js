@@ -1,3 +1,7 @@
+const IsoObjectLayoutDependency = typeof require !== 'undefined'
+    ? require('./object-layout')
+    : IsoObjectLayout;
+
 class IsoObjectRenderer {
     constructor(ctx, isoMath, materials, tileWidth, tileHeight) {
         this.ctx = ctx;
@@ -8,7 +12,7 @@ class IsoObjectRenderer {
     }
 
     drawObjects(objects, viewport) {
-        const visibleObjects = IsoObjectLayout.sortObjects(objects)
+        const visibleObjects = IsoObjectLayoutDependency.sortObjects(objects)
             .filter((object) => this.isObjectNearViewport(object, viewport));
 
         for (const object of visibleObjects) {
@@ -21,7 +25,7 @@ class IsoObjectRenderer {
     isObjectNearViewport(object, viewport) {
         const screenPos = this.isoMath.getTileScreenPosition(object.x, object.y, viewport.offsetX, viewport.offsetY);
 
-        return IsoObjectLayout.isNearViewport(
+        return IsoObjectLayoutDependency.isNearViewport(
             object,
             screenPos,
             viewport.width,

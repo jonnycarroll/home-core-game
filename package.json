@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "start": "echo 'Game runs in browser - open index.html'",
-    "test": "node tests/iso-math.test.js"
+    "test": "node tests/iso-math.test.js && node tests/object-renderer.test.js"
   },
   "keywords": [
     "game",
