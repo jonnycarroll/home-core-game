@@ -1,27 +1,39 @@
 # Isometric Grid Explorer
 
-A simple browser-based isometric grid explorer with draggable navigation and center marker.
+A small browser-based isometric grid explorer built with plain HTML, CSS, and JavaScript.
 
 ## Features
 
-- Infinite isometric grid that fills the screen
-- Drag to navigate around the grid
-- Red center marker at the middle of the grid
-- Return to center button
-- Responsive design that adapts to window size
+- Full-screen isometric grid rendered with HTML5 Canvas
+- Drag panning with mouse or touch
+- Hover highlight for the tile under the pointer
+- Blue global center tile at grid coordinate `(0, 0)`
+- Blue viewport-edge marker that points toward the global center when it is offscreen
+- Animated `Return to Center` button
+- Device-pixel-ratio aware canvas rendering for sharper high-DPI displays
 
-## How to Run
+## Run
 
-Simply open `index.html` in any modern web browser - no build process or dependencies required.
+Open `index.html` in a modern browser. There is no build step and no runtime dependency install required for the current app.
 
-## Usage
+The `package.json` file is metadata only at the moment; `npm start` just prints a reminder to open the HTML file.
 
-1. Click and drag to pan around the grid
-2. Click the "Return to Center" button to center the view on the red marker
-3. The grid will automatically generate a large area that fills the screen
+## Files
 
-## Technical Details
+```text
+index.html    Browser entrypoint
+styles.css    Full-screen canvas and button styles
+grid.js       Active grid rendering and interaction logic
+main.js       Placeholder for future app-level logic
+points.js     Prototype points module, not currently loaded
+```
 
-- Uses HTML5 Canvas for rendering
-- Pure JavaScript implementation with no external dependencies
-- Isometric projection using diamond-shaped tiles
+## Controls
+
+- Drag the canvas to pan around the grid.
+- Hover over tiles to highlight them.
+- Use `Return to Center` to animate back to the global center tile.
+
+## Current Scope
+
+The active project is currently the grid explorer. `points.js` is an early game-layer prototype and is not wired into the page yet.

@@ -1,7 +1,7 @@
 {
-  "name": "exercise-my-demons",
+  "name": "isometric-grid-explorer",
   "version": "1.0.0",
-  "description": "A simple isometric grid-based browser game where players build a demon gym by clicking to generate points and purchasing equipment",
+  "description": "A simple browser-based isometric grid explorer with draggable navigation",
   "main": "index.html",
   "scripts": {
     "start": "echo 'Game runs in browser - open index.html'",
@@ -11,12 +11,10 @@
     "game",
     "isometric",
     "browser",
-    "demons",
-    "gym",
     "html5",
     "canvas"
   ],
-  "author": "Exercise My Demons Team",
+  "author": "",
   "license": "MIT",
   "repository": {
     "type": "git",
