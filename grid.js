@@ -498,9 +498,8 @@ class IsoGrid {
     }
 
     drawObjects() {
-        const visibleObjects = this.scene.objects
-            .filter((object) => this.isObjectNearViewport(object))
-            .sort((a, b) => (a.x + a.y) - (b.x + b.y));
+        const visibleObjects = IsoObjectLayout.sortObjects(this.scene.objects)
+            .filter((object) => this.isObjectNearViewport(object));
 
         for (const object of visibleObjects) {
             if (object.type === 'cuboid') {
@@ -511,14 +510,15 @@ class IsoGrid {
 
     isObjectNearViewport(object) {
         const screenPos = this.getTileScreenPosition(object.x, object.y);
-        const height = object.height || 0;
-        const levels = object.levels || 1;
-        const totalHeight = height * levels;
 
-        return screenPos.x > -this.tileWidth &&
-            screenPos.x < this.viewportWidth + this.tileWidth &&
-            screenPos.y > -this.tileHeight - totalHeight &&
-            screenPos.y < this.viewportHeight + this.tileHeight;
+        return IsoObjectLayout.isNearViewport(
+            object,
+            screenPos,
+            this.viewportWidth,
+            this.viewportHeight,
+            this.tileWidth,
+            this.tileHeight
+        );
     }
 
     drawCuboid(object) {
