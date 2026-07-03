@@ -14,12 +14,13 @@ class IsoGrid {
                 type: 'cuboid',
                 x: 0,
                 y: 0,
+                levels: 3,
                 height: this.getTileEdgeLength() / 2,
                 colors: {
                     top: 'rgba(70, 190, 255, 0.96)',
                     right: 'rgba(0, 125, 210, 0.96)',
                     left: 'rgba(0, 85, 165, 0.96)',
-                    stroke: 'rgba(180, 230, 255, 0.45)'
+                    separator: 'rgba(190, 235, 255, 0.32)'
                 }
             }
         ];
@@ -538,35 +539,47 @@ class IsoGrid {
     isObjectNearViewport(object) {
         const screenPos = this.getTileScreenPosition(object.x, object.y);
         const height = object.height || 0;
+        const levels = object.levels || 1;
+        const totalHeight = height * levels;
 
         return screenPos.x > -this.tileWidth &&
             screenPos.x < this.viewportWidth + this.tileWidth &&
-            screenPos.y > -this.tileHeight - height &&
+            screenPos.y > -this.tileHeight - totalHeight &&
             screenPos.y < this.viewportHeight + this.tileHeight;
     }
 
     drawCuboid(object) {
-        const screenPos = this.getTileScreenPosition(object.x, object.y);
         const height = object.height || 24;
-        const colors = object.colors;
-        const top = [
-            { x: screenPos.x, y: screenPos.y - this.tileHeight / 2 - height },
-            { x: screenPos.x + this.tileWidth / 2, y: screenPos.y - height },
-            { x: screenPos.x, y: screenPos.y + this.tileHeight / 2 - height },
-            { x: screenPos.x - this.tileWidth / 2, y: screenPos.y - height }
-        ];
-        const bottom = [
-            { x: screenPos.x, y: screenPos.y - this.tileHeight / 2 },
-            { x: screenPos.x + this.tileWidth / 2, y: screenPos.y },
-            { x: screenPos.x, y: screenPos.y + this.tileHeight / 2 },
-            { x: screenPos.x - this.tileWidth / 2, y: screenPos.y }
-        ];
+        const levels = object.levels || 1;
 
         this.ctx.save();
-        this.drawPolygon([top[1], bottom[1], bottom[2], top[2]], colors.right, colors.stroke);
-        this.drawPolygon([top[2], bottom[2], bottom[3], top[3]], colors.left, colors.stroke);
-        this.drawPolygon(top, colors.top, colors.stroke);
+        for (let level = 0; level < levels; level++) {
+            this.drawCuboidLevel(object, level * height, height);
+        }
         this.ctx.restore();
+    }
+
+    drawCuboidLevel(object, baseOffset, height) {
+        const screenPos = this.getTileScreenPosition(object.x, object.y);
+        const baseY = screenPos.y - baseOffset;
+        const colors = object.colors;
+        const top = [
+            { x: screenPos.x, y: baseY - this.tileHeight / 2 - height },
+            { x: screenPos.x + this.tileWidth / 2, y: baseY - height },
+            { x: screenPos.x, y: baseY + this.tileHeight / 2 - height },
+            { x: screenPos.x - this.tileWidth / 2, y: baseY - height }
+        ];
+        const bottom = [
+            { x: screenPos.x, y: baseY - this.tileHeight / 2 },
+            { x: screenPos.x + this.tileWidth / 2, y: baseY },
+            { x: screenPos.x, y: baseY + this.tileHeight / 2 },
+            { x: screenPos.x - this.tileWidth / 2, y: baseY }
+        ];
+
+        this.drawPolygon([top[1], bottom[1], bottom[2], top[2]], colors.right);
+        this.drawPolygon([top[2], bottom[2], bottom[3], top[3]], colors.left);
+        this.drawPolygon(top, colors.top);
+        this.drawLevelSeparator(bottom, colors.separator);
     }
 
     drawPolygon(points, fillStyle, strokeStyle) {
@@ -586,6 +599,20 @@ class IsoGrid {
             this.ctx.lineWidth = 1;
             this.ctx.stroke();
         }
+    }
+
+    drawLevelSeparator(points, strokeStyle) {
+        if (!strokeStyle) {
+            return;
+        }
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(points[1].x, points[1].y);
+        this.ctx.lineTo(points[2].x, points[2].y);
+        this.ctx.lineTo(points[3].x, points[3].y);
+        this.ctx.strokeStyle = strokeStyle;
+        this.ctx.lineWidth = 1;
+        this.ctx.stroke();
     }
 }
 
