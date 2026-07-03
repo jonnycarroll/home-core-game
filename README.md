@@ -7,7 +7,7 @@ A small browser-based isometric grid explorer and early layout-engine prototype 
 - Full-screen isometric grid rendered with HTML5 Canvas
 - Drag panning with mouse or touch
 - Hover highlight for the tile under the pointer
-- Empty default scene ready for future gameplay objects
+- Electric blue global center tile at grid coordinate `(0, 0)`
 - Blue viewport-edge marker that points toward the global center when it is offscreen
 - Animated `Return to Center` button
 - Device-pixel-ratio aware canvas rendering for sharper high-DPI displays

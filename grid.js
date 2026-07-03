@@ -352,7 +352,7 @@ class IsoGrid {
     
     render() {
         // Clear canvas behind the tiled surface.
-        this.ctx.fillStyle = '#00a0ff';
+        this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.viewportWidth, this.viewportHeight);
         
         const { startX, endX, startY, endY } = this.getVisibleTiles();
@@ -440,6 +440,10 @@ class IsoGrid {
     }
 
     getTileBaseColor(x, y) {
+        if (x === 0 && y === 0) {
+            return { r: 0, g: 160, b: 255, a: 0.95 };
+        }
+
         return null;
     }
 
