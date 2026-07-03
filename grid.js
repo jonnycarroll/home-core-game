@@ -11,6 +11,13 @@ class IsoGrid {
         this.tileHeight = 30;
         this.isoMath = new IsoMath(this.tileWidth, this.tileHeight);
         this.materials = IsoMaterials;
+        this.objectRenderer = new IsoObjectRenderer(
+            this.ctx,
+            this.isoMath,
+            this.materials,
+            this.tileWidth,
+            this.tileHeight
+        );
         this.scene = IsoScene.createDefault(this.getTileEdgeLength() / 2);
         this.offsetX = 0;
         this.offsetY = 0;
@@ -498,98 +505,12 @@ class IsoGrid {
     }
 
     drawObjects() {
-        const visibleObjects = IsoObjectLayout.sortObjects(this.scene.objects)
-            .filter((object) => this.isObjectNearViewport(object));
-
-        for (const object of visibleObjects) {
-            if (object.type === 'cuboid') {
-                this.drawCuboid(object);
-            }
-        }
-    }
-
-    isObjectNearViewport(object) {
-        const screenPos = this.getTileScreenPosition(object.x, object.y);
-
-        return IsoObjectLayout.isNearViewport(
-            object,
-            screenPos,
-            this.viewportWidth,
-            this.viewportHeight,
-            this.tileWidth,
-            this.tileHeight
-        );
-    }
-
-    drawCuboid(object) {
-        const height = object.height || 24;
-        const levels = object.levels || 1;
-
-        this.ctx.save();
-        for (let level = 0; level < levels; level++) {
-            this.drawCuboidLevel(object, level * height, height);
-        }
-        this.ctx.restore();
-    }
-
-    drawCuboidLevel(object, baseOffset, height) {
-        const screenPos = this.getTileScreenPosition(object.x, object.y);
-        const baseY = screenPos.y - baseOffset;
-        const colors = this.getObjectMaterial(object);
-        const top = [
-            { x: screenPos.x, y: baseY - this.tileHeight / 2 - height },
-            { x: screenPos.x + this.tileWidth / 2, y: baseY - height },
-            { x: screenPos.x, y: baseY + this.tileHeight / 2 - height },
-            { x: screenPos.x - this.tileWidth / 2, y: baseY - height }
-        ];
-        const bottom = [
-            { x: screenPos.x, y: baseY - this.tileHeight / 2 },
-            { x: screenPos.x + this.tileWidth / 2, y: baseY },
-            { x: screenPos.x, y: baseY + this.tileHeight / 2 },
-            { x: screenPos.x - this.tileWidth / 2, y: baseY }
-        ];
-
-        this.drawPolygon([top[1], bottom[1], bottom[2], top[2]], colors.right);
-        this.drawPolygon([top[2], bottom[2], bottom[3], top[3]], colors.left);
-        this.drawPolygon(top, colors.top);
-        this.drawLevelSeparator(bottom, colors.separator);
-    }
-
-    getObjectMaterial(object) {
-        return this.materials[object.material] || this.materials.blueBlock;
-    }
-
-    drawPolygon(points, fillStyle, strokeStyle) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(points[0].x, points[0].y);
-
-        for (let i = 1; i < points.length; i++) {
-            this.ctx.lineTo(points[i].x, points[i].y);
-        }
-
-        this.ctx.closePath();
-        this.ctx.fillStyle = fillStyle;
-        this.ctx.fill();
-
-        if (strokeStyle) {
-            this.ctx.strokeStyle = strokeStyle;
-            this.ctx.lineWidth = 1;
-            this.ctx.stroke();
-        }
-    }
-
-    drawLevelSeparator(points, strokeStyle) {
-        if (!strokeStyle) {
-            return;
-        }
-
-        this.ctx.beginPath();
-        this.ctx.moveTo(points[1].x, points[1].y);
-        this.ctx.lineTo(points[2].x, points[2].y);
-        this.ctx.lineTo(points[3].x, points[3].y);
-        this.ctx.strokeStyle = strokeStyle;
-        this.ctx.lineWidth = 1;
-        this.ctx.stroke();
+        this.objectRenderer.drawObjects(this.scene.objects, {
+            offsetX: this.offsetX,
+            offsetY: this.offsetY,
+            width: this.viewportWidth,
+            height: this.viewportHeight
+        });
     }
 }
 
