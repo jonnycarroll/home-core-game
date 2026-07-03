@@ -9,6 +9,7 @@ class IsoGrid {
         this.viewportHeight = 0;
         this.tileWidth = 60;
         this.tileHeight = 30;
+        this.isoMath = new IsoMath(this.tileWidth, this.tileHeight);
         this.objects = [
             {
                 type: 'cuboid',
@@ -191,34 +192,19 @@ class IsoGrid {
     }
     
     getTileScreenPosition(tileX, tileY) {
-        return {
-            x: (tileX - tileY) * (this.tileWidth / 2) + this.offsetX,
-            y: (tileX + tileY) * (this.tileHeight / 2) + this.offsetY
-        };
+        return this.isoMath.getTileScreenPosition(tileX, tileY, this.offsetX, this.offsetY);
     }
 
     getTileEdgeLength() {
-        return Math.hypot(this.tileWidth / 2, this.tileHeight / 2);
+        return this.isoMath.getTileEdgeLength();
     }
 
     getGridCoordsFromScreen(screenX, screenY) {
-        const localX = screenX - this.offsetX;
-        const localY = screenY - this.offsetY;
-        const normalizedX = localX / (this.tileWidth / 2);
-        const normalizedY = localY / (this.tileHeight / 2);
-
-        return {
-            x: (normalizedX + normalizedY) / 2,
-            y: (normalizedY - normalizedX) / 2
-        };
+        return this.isoMath.getGridCoordsFromScreen(screenX, screenY, this.offsetX, this.offsetY);
     }
 
     isPointInDiamond(px, py, tileX, tileY) {
-        const screenPos = this.getTileScreenPosition(tileX, tileY);
-        const normalizedX = Math.abs(px - screenPos.x) / (this.tileWidth / 2);
-        const normalizedY = Math.abs(py - screenPos.y) / (this.tileHeight / 2);
-
-        return normalizedX + normalizedY <= 1;
+        return this.isoMath.isPointInDiamond(px, py, tileX, tileY, this.offsetX, this.offsetY);
     }
 
     getTileAtPosition(x, y) {
