@@ -11,6 +11,7 @@ class IsoGrid {
         this.tileHeight = 30;
         this.isoMath = new IsoMath(this.tileWidth, this.tileHeight);
         this.materials = IsoMaterials;
+        this.tileRenderer = new IsoTileRenderer(this.ctx, this.isoMath, this.tileWidth, this.tileHeight);
         this.objectRenderer = new IsoObjectRenderer(
             this.ctx,
             this.isoMath,
@@ -465,43 +466,18 @@ class IsoGrid {
     }
     
     drawTile(x, y) {
-        // Calculate screen position of tile
-        const screenPos = this.getTileScreenPosition(x, y);
-        const screenX = screenPos.x;
-        const screenY = screenPos.y;
-        
-        // Draw tile with faint grid lines (only if tile is visible)
-        if (screenX > -this.tileWidth && screenX < this.viewportWidth + this.tileWidth &&
-            screenY > -this.tileHeight && screenY < this.viewportHeight + this.tileHeight) {
-            
-            // Calculate the four corners of the diamond-shaped tile
-            const corners = [
-                { x: screenX, y: screenY - this.tileHeight / 2 },
-                { x: screenX + this.tileWidth / 2, y: screenY },
-                { x: screenX, y: screenY + this.tileHeight / 2 },
-                { x: screenX - this.tileWidth / 2, y: screenY }
-            ];
-            
-            // Draw tile outline with faint lines
-            this.ctx.beginPath();
-            this.ctx.moveTo(corners[0].x, corners[0].y);
-            for (let i = 1; i < corners.length; i++) {
-                this.ctx.lineTo(corners[i].x, corners[i].y);
-            }
-            this.ctx.closePath();
-            
-            const baseColor = this.getTileBaseColor(x, y);
-            const hoverAlpha = this.getHoverAlphaForTile(x, y);
-            const fillStyle = hoverAlpha > 0
-                ? this.getHoverFillStyle(baseColor, hoverAlpha)
-                : this.getBaseFillStyle(baseColor);
+        const baseColor = this.getTileBaseColor(x, y);
+        const hoverAlpha = this.getHoverAlphaForTile(x, y);
+        const fillStyle = hoverAlpha > 0
+            ? this.getHoverFillStyle(baseColor, hoverAlpha)
+            : this.getBaseFillStyle(baseColor);
 
-            this.ctx.fillStyle = fillStyle || 'rgba(210, 214, 220, 0.08)';
-            this.ctx.fill();
-            this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.75)';
-            this.ctx.lineWidth = 1;
-            this.ctx.stroke();
-        }
+        this.tileRenderer.drawTile(x, y, {
+            offsetX: this.offsetX,
+            offsetY: this.offsetY,
+            width: this.viewportWidth,
+            height: this.viewportHeight
+        }, fillStyle);
     }
 
     drawObjects() {
