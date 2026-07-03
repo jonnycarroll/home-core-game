@@ -10,21 +10,7 @@ class IsoGrid {
         this.tileWidth = 60;
         this.tileHeight = 30;
         this.isoMath = new IsoMath(this.tileWidth, this.tileHeight);
-        this.objects = [
-            {
-                type: 'cuboid',
-                x: 0,
-                y: 0,
-                levels: 3,
-                height: this.getTileEdgeLength() / 2,
-                colors: {
-                    top: 'rgba(70, 190, 255, 0.96)',
-                    right: 'rgba(0, 125, 210, 0.96)',
-                    left: 'rgba(0, 85, 165, 0.96)',
-                    separator: 'rgba(190, 235, 255, 0.32)'
-                }
-            }
-        ];
+        this.scene = IsoScene.createDefault(this.getTileEdgeLength() / 2);
         this.offsetX = 0;
         this.offsetY = 0;
         this.isDragging = false;
@@ -511,7 +497,7 @@ class IsoGrid {
     }
 
     drawObjects() {
-        const visibleObjects = this.objects
+        const visibleObjects = this.scene.objects
             .filter((object) => this.isObjectNearViewport(object))
             .sort((a, b) => (a.x + a.y) - (b.x + b.y));
 
