@@ -9,6 +9,20 @@ class IsoGrid {
         this.viewportHeight = 0;
         this.tileWidth = 60;
         this.tileHeight = 30;
+        this.objects = [
+            {
+                type: 'cuboid',
+                x: 0,
+                y: 0,
+                height: this.getTileEdgeLength() / 2,
+                colors: {
+                    top: 'rgba(70, 190, 255, 0.96)',
+                    right: 'rgba(0, 125, 210, 0.96)',
+                    left: 'rgba(0, 85, 165, 0.96)',
+                    stroke: 'rgba(180, 230, 255, 0.45)'
+                }
+            }
+        ];
         this.offsetX = 0;
         this.offsetY = 0;
         this.isDragging = false;
@@ -182,6 +196,10 @@ class IsoGrid {
         };
     }
 
+    getTileEdgeLength() {
+        return Math.hypot(this.tileWidth / 2, this.tileHeight / 2);
+    }
+
     getGridCoordsFromScreen(screenX, screenY) {
         const localX = screenX - this.offsetX;
         const localY = screenY - this.offsetY;
@@ -351,7 +369,7 @@ class IsoGrid {
     }
     
     render() {
-        // Clear canvas with black background
+        // Clear canvas behind the tiled surface.
         this.ctx.fillStyle = '#000';
         this.ctx.fillRect(0, 0, this.viewportWidth, this.viewportHeight);
         
@@ -364,6 +382,7 @@ class IsoGrid {
             }
         }
 
+        this.drawObjects();
         this.drawCenterDirectionMarker();
     }
 
@@ -439,10 +458,6 @@ class IsoGrid {
     }
 
     getTileBaseColor(x, y) {
-        if (x === 0 && y === 0) {
-            return { r: 0, g: 160, b: 255, a: 0.95 };
-        }
-
         return null;
     }
 
@@ -465,7 +480,7 @@ class IsoGrid {
             return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
 
-        return `rgba(255, 235, 80, ${0.18 + hoverAlpha * 0.42})`;
+        return `rgba(255, 255, 255, ${hoverAlpha * 0.7})`;
     }
     
     drawTile(x, y) {
@@ -500,12 +515,74 @@ class IsoGrid {
                 ? this.getHoverFillStyle(baseColor, hoverAlpha)
                 : this.getBaseFillStyle(baseColor);
 
-            if (fillStyle) {
-                this.ctx.fillStyle = fillStyle;
-                this.ctx.fill();
-            }
+            this.ctx.fillStyle = fillStyle || 'rgba(210, 214, 220, 0.08)';
+            this.ctx.fill();
+            this.ctx.strokeStyle = 'rgba(0, 0, 0, 0.75)';
+            this.ctx.lineWidth = 1;
+            this.ctx.stroke();
+        }
+    }
 
-            this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    drawObjects() {
+        const visibleObjects = this.objects
+            .filter((object) => this.isObjectNearViewport(object))
+            .sort((a, b) => (a.x + a.y) - (b.x + b.y));
+
+        for (const object of visibleObjects) {
+            if (object.type === 'cuboid') {
+                this.drawCuboid(object);
+            }
+        }
+    }
+
+    isObjectNearViewport(object) {
+        const screenPos = this.getTileScreenPosition(object.x, object.y);
+        const height = object.height || 0;
+
+        return screenPos.x > -this.tileWidth &&
+            screenPos.x < this.viewportWidth + this.tileWidth &&
+            screenPos.y > -this.tileHeight - height &&
+            screenPos.y < this.viewportHeight + this.tileHeight;
+    }
+
+    drawCuboid(object) {
+        const screenPos = this.getTileScreenPosition(object.x, object.y);
+        const height = object.height || 24;
+        const colors = object.colors;
+        const top = [
+            { x: screenPos.x, y: screenPos.y - this.tileHeight / 2 - height },
+            { x: screenPos.x + this.tileWidth / 2, y: screenPos.y - height },
+            { x: screenPos.x, y: screenPos.y + this.tileHeight / 2 - height },
+            { x: screenPos.x - this.tileWidth / 2, y: screenPos.y - height }
+        ];
+        const bottom = [
+            { x: screenPos.x, y: screenPos.y - this.tileHeight / 2 },
+            { x: screenPos.x + this.tileWidth / 2, y: screenPos.y },
+            { x: screenPos.x, y: screenPos.y + this.tileHeight / 2 },
+            { x: screenPos.x - this.tileWidth / 2, y: screenPos.y }
+        ];
+
+        this.ctx.save();
+        this.drawPolygon([top[1], bottom[1], bottom[2], top[2]], colors.right, colors.stroke);
+        this.drawPolygon([top[2], bottom[2], bottom[3], top[3]], colors.left, colors.stroke);
+        this.drawPolygon(top, colors.top, colors.stroke);
+        this.ctx.restore();
+    }
+
+    drawPolygon(points, fillStyle, strokeStyle) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(points[0].x, points[0].y);
+
+        for (let i = 1; i < points.length; i++) {
+            this.ctx.lineTo(points[i].x, points[i].y);
+        }
+
+        this.ctx.closePath();
+        this.ctx.fillStyle = fillStyle;
+        this.ctx.fill();
+
+        if (strokeStyle) {
+            this.ctx.strokeStyle = strokeStyle;
             this.ctx.lineWidth = 1;
             this.ctx.stroke();
         }
