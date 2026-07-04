@@ -188,7 +188,8 @@ body, html {
 }
 
 #hud,
-#side-panel {
+#side-panel,
+#skills-panel {
     position: absolute;
     z-index: 10;
     background: var(--color-panel);
@@ -199,6 +200,7 @@ body, html {
 
 #hud,
 #side-panel,
+#research-dock,
 #center-button {
     opacity: 1;
     transition: opacity 220ms ease, visibility 220ms ease;
@@ -206,6 +208,7 @@ body, html {
 
 .pre-start #hud,
 .pre-start #side-panel,
+.pre-start #research-dock,
 .pre-start #center-button {
     visibility: hidden;
     opacity: 0;
@@ -284,8 +287,7 @@ body, html {
 }
 
 #selected-panel {
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--color-panel-divider);
+    min-height: 0;
 }
 
 #tile-title,
@@ -320,8 +322,57 @@ body, html {
     background: var(--color-control-disabled);
 }
 
+#research-dock {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.research-button {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    padding: 0;
+    background: var(--color-panel);
+    color: var(--color-text);
+    border: 1px solid var(--color-control-strong-border);
+    border-radius: 6px;
+    box-shadow: 0 12px 28px var(--color-panel-shadow);
+    backdrop-filter: blur(1px);
+    cursor: pointer;
+}
+
+.research-button:hover,
+.research-button[aria-expanded="true"] {
+    background: var(--color-panel-hover);
+}
+
+.research-button svg {
+    width: 36px;
+    height: 36px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.research-button circle {
+    fill: currentColor;
+}
+
 #skills-panel {
-    padding-top: 12px;
+    left: 0;
+    bottom: 76px;
+    width: 280px;
+    border-radius: 6px;
+    padding: 12px;
+}
+
+#skills-panel[hidden] {
+    display: none;
 }
 
 .skill-button {
@@ -342,15 +393,25 @@ body, html {
     }
 
     #side-panel {
-        top: auto;
+        top: 112px;
         right: 10px;
-        bottom: 66px;
-        left: 10px;
-        width: auto;
+        bottom: auto;
+        left: auto;
+        width: min(280px, calc(100vw - 20px));
     }
 
     #viewport-controls {
         right: 10px;
         bottom: 16px;
+    }
+
+    #research-dock {
+        bottom: 16px;
+        left: 10px;
+    }
+
+    #skills-panel {
+        bottom: 76px;
+        width: min(280px, calc(100vw - 20px));
     }
 }

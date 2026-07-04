@@ -77,6 +77,8 @@ class IsoGrid {
             tileAction: document.getElementById('tile-action'),
             startButton: document.getElementById('start-button'),
             welcomeScreen: document.getElementById('welcome-screen'),
+            researchToggle: document.getElementById('research-toggle'),
+            skillsPanel: document.getElementById('skills-panel'),
             skillButtons: Array.from(document.querySelectorAll('.skill-button')),
             skillExpansion: document.getElementById('skill-expansion'),
             skillProduction: document.getElementById('skill-production'),
@@ -172,6 +174,7 @@ class IsoGrid {
         // Center button event listener
         document.getElementById('center-button').addEventListener('click', () => this.centerView());
         this.dom.startButton.addEventListener('click', () => this.startGame());
+        this.dom.researchToggle.addEventListener('click', () => this.toggleResearchPanel());
         this.dom.tileAction.addEventListener('click', () => this.handleSelectedTileAction());
         for (const button of this.dom.skillButtons) {
             button.addEventListener('click', () => {
@@ -190,6 +193,12 @@ class IsoGrid {
     requestHudUpdate() {
         this.hudUpdateRequested = true;
         this.startAnimationLoop();
+    }
+
+    toggleResearchPanel() {
+        const nextExpanded = this.dom.researchToggle.getAttribute('aria-expanded') !== 'true';
+        this.dom.researchToggle.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+        this.dom.skillsPanel.hidden = !nextExpanded;
     }
 
     startGame() {

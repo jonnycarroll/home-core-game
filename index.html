@@ -32,14 +32,24 @@
         <div class="xp-track"><div id="xp-fill"></div></div>
     </section>
 
-    <aside id="side-panel" aria-label="Tile and research controls">
+    <aside id="side-panel" aria-label="Tile controls">
         <div id="selected-panel">
             <h1 id="tile-title">Home Core</h1>
             <p id="tile-details"></p>
             <button id="tile-action" type="button">Select</button>
         </div>
+    </aside>
 
-        <div id="skills-panel">
+    <div id="research-dock">
+        <button id="research-toggle" class="research-button" type="button" title="Research" aria-label="Research" aria-expanded="false" aria-controls="skills-panel">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="2.4"></circle>
+                <ellipse cx="12" cy="12" rx="8.5" ry="3.4"></ellipse>
+                <ellipse cx="12" cy="12" rx="8.5" ry="3.4" transform="rotate(60 12 12)"></ellipse>
+                <ellipse cx="12" cy="12" rx="8.5" ry="3.4" transform="rotate(-60 12 12)"></ellipse>
+            </svg>
+        </button>
+        <div id="skills-panel" hidden>
             <h2>Research</h2>
             <button class="skill-button" type="button" data-skill="expansion">
                 <span>Expansion</span>
@@ -54,7 +64,7 @@
                 <small id="skill-surveying">Level 0</small>
             </button>
         </div>
-    </aside>
+    </div>
 
     <div id="viewport-controls" aria-label="Viewport controls">
         <button id="center-button" class="icon-button" type="button" title="Return to Home Core" aria-label="Return to Home Core">
