@@ -13,7 +13,8 @@ A small browser-based idle/exploration builder built with plain HTML, CSS, and J
 - Base XP from production, Home Core level-ups, and expanding reveal radius
 - Three-branch Research skill tree for Expansion, Production, and Surveying
 - Welcome start state that delays HUD display and production until the run begins
-- HUD for resources, rates, Base XP, selected tile details, and skill purchases
+- Bottom dock for resources, Base XP, Home Core return, and Research skill purchases
+- Top-corner panels for selected tile details and appearance controls
 - Tokenized light/dark appearance that follows system preferences or a saved choice
 - Blue viewport-edge marker and Home button that point back to the Home Core
 - Device-pixel-ratio aware canvas rendering for sharper high-DPI displays
@@ -64,8 +65,8 @@ tests/        Small Node-based regression tests
 - Hover tiles to inspect claim costs, connection state, and resource benefits.
 - Click a revealed adjacent tile to claim it when affordable.
 - Click the Home Core or selected-tile button to level up when Base XP is full.
-- Use the atom control to open Research skill purchases.
-- Use the map-pin control to animate back to the Home Core.
+- Use the atom control in the bottom dock to open Research skill purchases.
+- Use the Blue Core control in the bottom dock to animate back to the Home Core.
 - Use the theme control to cycle between system, light, and dark appearance.
 
 ## Current Scope

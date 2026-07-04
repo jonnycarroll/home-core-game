@@ -135,13 +135,12 @@ body, html {
     }
 }
 
-#viewport-controls {
+#theme-controls {
     position: absolute;
-    bottom: 20px;
+    top: 16px;
     right: 20px;
     z-index: 10;
     display: flex;
-    flex-direction: column;
     gap: 8px;
 }
 
@@ -187,8 +186,9 @@ body, html {
     display: block;
 }
 
-#hud,
 #side-panel,
+#hud .hud-panel,
+#hud .hud-button,
 #skills-panel {
     position: absolute;
     z-index: 10;
@@ -221,25 +221,19 @@ body, html {
 }
 
 #hud {
-    top: 16px;
-    left: 16px;
-    width: min(520px, calc(100vw - 32px));
-    border-radius: 6px;
-    padding: 12px;
-}
-
-.hud-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-}
-
-.hud-grid div {
-    min-width: 0;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    pointer-events: none;
 }
 
 .label,
-.hud-grid small,
+.hud-panel small,
 #side-panel small,
 #tile-details {
     color: var(--color-muted);
@@ -251,14 +245,32 @@ body, html {
     text-transform: uppercase;
 }
 
-.hud-grid strong {
+.hud-panel {
+    position: static;
+    min-width: 104px;
+    border-radius: 6px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    pointer-events: auto;
+}
+
+.resource-panel {
+    width: 132px;
+}
+
+.progress-panel {
+    flex: 1;
+    min-width: 180px;
+}
+
+.hud-panel strong {
     display: block;
     margin-top: 4px;
     font-size: 20px;
     line-height: 1.1;
 }
 
-.hud-grid small {
+.hud-panel small {
     display: block;
     margin-top: 2px;
     font-size: 12px;
@@ -280,7 +292,7 @@ body, html {
 
 #side-panel {
     top: 16px;
-    right: 16px;
+    left: 16px;
     width: 280px;
     border-radius: 6px;
     padding: 12px;
@@ -322,14 +334,9 @@ body, html {
     background: var(--color-control-disabled);
 }
 
-#research-dock {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    z-index: 10;
-}
-
+.hud-button,
 .research-button {
+    position: static;
     display: grid;
     place-items: center;
     width: 64px;
@@ -342,13 +349,16 @@ body, html {
     box-shadow: 0 12px 28px var(--color-panel-shadow);
     backdrop-filter: blur(1px);
     cursor: pointer;
+    pointer-events: auto;
 }
 
+.hud-button:hover,
 .research-button:hover,
 .research-button[aria-expanded="true"] {
     background: var(--color-panel-hover);
 }
 
+.hud-button svg,
 .research-button svg {
     width: 36px;
     height: 36px;
@@ -359,8 +369,35 @@ body, html {
     stroke-linejoin: round;
 }
 
+.home-button .core-top {
+    fill: #7de6ff;
+    stroke: none;
+}
+
+.home-button .core-right {
+    fill: #168fc5;
+    stroke: none;
+}
+
+.home-button .core-left {
+    fill: #32b6e6;
+    stroke: none;
+}
+
+.home-button .core-line {
+    fill: none;
+    stroke: rgba(230, 250, 255, 0.92);
+    stroke-width: 1.4;
+}
+
 .research-button circle {
     fill: currentColor;
+}
+
+#research-dock {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
 }
 
 #skills-panel {
@@ -386,32 +423,73 @@ body, html {
 
 @media (max-width: 760px) {
     #hud {
-        top: 10px;
+        right: 10px;
+        bottom: 16px;
         left: 10px;
-        width: calc(100vw - 20px);
-        box-sizing: border-box;
+        gap: 6px;
     }
 
     #side-panel {
-        top: 112px;
-        right: 10px;
-        bottom: auto;
-        left: auto;
-        width: min(280px, calc(100vw - 20px));
-    }
-
-    #viewport-controls {
-        right: 10px;
-        bottom: 16px;
-    }
-
-    #research-dock {
-        bottom: 16px;
+        top: 10px;
         left: 10px;
+        bottom: auto;
+        width: min(280px, calc(100vw - 62px));
+    }
+
+    #theme-controls {
+        top: 10px;
+        right: 10px;
+    }
+
+    .hud-button,
+    .research-button {
+        width: 54px;
+        height: 54px;
+    }
+
+    .hud-button svg,
+    .research-button svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .resource-panel {
+        width: 104px;
+    }
+
+    .progress-panel {
+        min-width: 128px;
+    }
+
+    .hud-panel {
+        padding: 8px 9px;
     }
 
     #skills-panel {
-        bottom: 76px;
+        bottom: 64px;
         width: min(280px, calc(100vw - 20px));
+    }
+}
+
+@media (max-width: 560px) {
+    #hud {
+        flex-wrap: wrap;
+    }
+
+    .progress-panel {
+        flex-basis: 100%;
+        order: 5;
+    }
+}
+
+@media (max-width: 360px) {
+    .hud-button,
+    .research-button {
+        width: 50px;
+        height: 50px;
+    }
+
+    .resource-panel {
+        width: 88px;
     }
 }

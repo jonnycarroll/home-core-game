@@ -11,27 +11,6 @@
     <div id="welcome-screen" aria-label="Start game">
         <button id="start-button" type="button">Place the Blue Core</button>
     </div>
-    <section id="hud" aria-label="Base status">
-        <div class="hud-grid">
-            <div>
-                <span class="label">Energy</span>
-                <strong id="energy-value">0</strong>
-                <small id="energy-rate">+0/s</small>
-            </div>
-            <div>
-                <span class="label">Research</span>
-                <strong id="research-value">0</strong>
-                <small id="research-rate">+0/s</small>
-            </div>
-            <div>
-                <span class="label">Base</span>
-                <strong id="base-level">1</strong>
-                <small id="base-xp">0 / 0 XP</small>
-            </div>
-        </div>
-        <div class="xp-track"><div id="xp-fill"></div></div>
-    </section>
-
     <aside id="side-panel" aria-label="Tile controls">
         <div id="selected-panel">
             <h1 id="tile-title">Home Core</h1>
@@ -40,39 +19,7 @@
         </div>
     </aside>
 
-    <div id="research-dock">
-        <button id="research-toggle" class="research-button" type="button" title="Research" aria-label="Research" aria-expanded="false" aria-controls="skills-panel">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="2.4"></circle>
-                <ellipse cx="12" cy="12" rx="8.5" ry="3.4"></ellipse>
-                <ellipse cx="12" cy="12" rx="8.5" ry="3.4" transform="rotate(60 12 12)"></ellipse>
-                <ellipse cx="12" cy="12" rx="8.5" ry="3.4" transform="rotate(-60 12 12)"></ellipse>
-            </svg>
-        </button>
-        <div id="skills-panel" hidden>
-            <h2>Research</h2>
-            <button class="skill-button" type="button" data-skill="expansion">
-                <span>Expansion</span>
-                <small id="skill-expansion">Level 0</small>
-            </button>
-            <button class="skill-button" type="button" data-skill="production">
-                <span>Production</span>
-                <small id="skill-production">Level 0</small>
-            </button>
-            <button class="skill-button" type="button" data-skill="surveying">
-                <span>Surveying</span>
-                <small id="skill-surveying">Level 0</small>
-            </button>
-        </div>
-    </div>
-
-    <div id="viewport-controls" aria-label="Viewport controls">
-        <button id="center-button" class="icon-button" type="button" title="Return to Home Core" aria-label="Return to Home Core">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 22s7-5.5 7-12a7 7 0 0 0-14 0c0 6.5 7 12 7 12Z"></path>
-                <circle cx="12" cy="10" r="2.5"></circle>
-            </svg>
-        </button>
+    <div id="theme-controls" aria-label="Display controls">
         <button id="theme-toggle" class="icon-button" type="button" title="Theme: System" aria-label="Theme: System">
             <svg class="theme-icon theme-icon-system" viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="12" cy="12" r="4"></circle>
@@ -88,6 +35,69 @@
             </svg>
         </button>
     </div>
+
+    <section id="hud" aria-label="Base status">
+        <button id="center-button" class="hud-button home-button" type="button" title="Return to Home Core" aria-label="Return to Home Core">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+                <path class="core-top" d="M16 3 28 9 16 15 4 9Z"></path>
+                <path class="core-right" d="M16 15 28 9 28 20 16 27Z"></path>
+                <path class="core-left" d="M16 15 4 9 4 20 16 27Z"></path>
+                <path class="core-line" d="M16 3 28 9 28 20 16 27 4 20 4 9Z"></path>
+                <path class="core-line" d="M4 9 16 15 28 9M16 15v12"></path>
+            </svg>
+        </button>
+
+        <div class="hud-panel resource-panel">
+            <div>
+                <span class="label">Energy</span>
+                <strong id="energy-value">0</strong>
+                <small id="energy-rate">+0/s</small>
+            </div>
+        </div>
+
+        <div id="research-dock">
+            <button id="research-toggle" class="hud-button research-button" type="button" title="Research" aria-label="Research" aria-expanded="false" aria-controls="skills-panel">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="2.4"></circle>
+                    <ellipse cx="12" cy="12" rx="8.5" ry="3.4"></ellipse>
+                    <ellipse cx="12" cy="12" rx="8.5" ry="3.4" transform="rotate(60 12 12)"></ellipse>
+                    <ellipse cx="12" cy="12" rx="8.5" ry="3.4" transform="rotate(-60 12 12)"></ellipse>
+                </svg>
+            </button>
+            <div id="skills-panel" hidden>
+                <h2>Research</h2>
+                <button class="skill-button" type="button" data-skill="expansion">
+                    <span>Expansion</span>
+                    <small id="skill-expansion">Level 0</small>
+                </button>
+                <button class="skill-button" type="button" data-skill="production">
+                    <span>Production</span>
+                    <small id="skill-production">Level 0</small>
+                </button>
+                <button class="skill-button" type="button" data-skill="surveying">
+                    <span>Surveying</span>
+                    <small id="skill-surveying">Level 0</small>
+                </button>
+            </div>
+        </div>
+
+        <div class="hud-panel resource-panel">
+            <div>
+                <span class="label">Research</span>
+                <strong id="research-value">0</strong>
+                <small id="research-rate">+0/s</small>
+            </div>
+        </div>
+
+        <div class="hud-panel progress-panel">
+            <div>
+                <span class="label">Base</span>
+                <strong id="base-level">1</strong>
+                <small id="base-xp">0 / 0 XP</small>
+            </div>
+            <div class="xp-track"><div id="xp-fill"></div></div>
+        </div>
+    </section>
     
     <script src="appearance.js"></script>
     <script src="iso-math.js"></script>
