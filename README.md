@@ -58,7 +58,7 @@ tests/        Small Node-based regression tests
 
 ## Controls
 
-- Press Start the Home Core to begin the run.
+- Place the Blue Core on the central tile or press the placement button to begin the run.
 - Drag the canvas to pan around the grid.
 - Hover over tiles to highlight them.
 - Hover tiles to inspect claim costs, connection state, and resource benefits.

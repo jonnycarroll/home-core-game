@@ -31,6 +31,7 @@ class IsoGrid {
         this.lastX = 0;
         this.lastY = 0;
         this.hoveredTile = null;
+        this.corePlacementTile = { x: 0, y: 0 };
         this.hoverAnimations = [];
         this.hoverFadeDuration = 140;
         this.centerAnimation = null;
@@ -197,6 +198,7 @@ class IsoGrid {
         }
 
         this.gameStarted = true;
+        this.corePlacementTile = { x: 0, y: 0 };
         this.gameState.lastTick = 0;
         document.body.classList.remove('pre-start');
         document.body.classList.add('game-started');
@@ -204,9 +206,31 @@ class IsoGrid {
         this.requestHudUpdate();
         this.requestRender();
     }
+
+    updateCorePlacementFromEvent(event) {
+        const rect = this.canvas.getBoundingClientRect();
+        this.updateCorePlacementFromPoint(event.clientX - rect.left, event.clientY - rect.top);
+    }
+
+    updateCorePlacementFromPoint(x, y) {
+        this.corePlacementTile = this.getTileAtPosition(x, y);
+        this.requestRender();
+    }
+
+    placeCoreFromPoint(x, y) {
+        const tile = this.getTileAtPosition(x, y);
+        this.corePlacementTile = tile;
+        this.requestRender();
+
+        if (this.gameState.isHomeCore(tile.x, tile.y)) {
+            this.startGame();
+        }
+    }
     
     handleMouseDown(e) {
         if (!this.gameStarted) {
+            const rect = this.canvas.getBoundingClientRect();
+            this.placeCoreFromPoint(e.clientX - rect.left, e.clientY - rect.top);
             return;
         }
 
@@ -221,6 +245,7 @@ class IsoGrid {
     
     handleMouseMove(e) {
         if (!this.gameStarted) {
+            this.updateCorePlacementFromEvent(e);
             return;
         }
 
@@ -266,6 +291,9 @@ class IsoGrid {
     
     handleTouchStart(e) {
         if (!this.gameStarted) {
+            const rect = this.canvas.getBoundingClientRect();
+            this.updateCorePlacementFromPoint(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+            e.preventDefault();
             return;
         }
 
@@ -281,6 +309,9 @@ class IsoGrid {
     
     handleTouchMove(e) {
         if (!this.gameStarted) {
+            const rect = this.canvas.getBoundingClientRect();
+            this.updateCorePlacementFromPoint(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+            e.preventDefault();
             return;
         }
 
@@ -306,6 +337,13 @@ class IsoGrid {
     
     handleTouchEnd(e) {
         if (!this.gameStarted) {
+            if (this.corePlacementTile && this.gameState.isHomeCore(this.corePlacementTile.x, this.corePlacementTile.y)) {
+                this.startGame();
+            }
+
+            if (e) {
+                e.preventDefault();
+            }
             return;
         }
 
@@ -715,10 +753,13 @@ class IsoGrid {
     }
 
     drawObjects() {
+        const coreTile = this.gameStarted
+            ? { x: 0, y: 0 }
+            : this.corePlacementTile;
         const objects = [{
             type: 'cuboid',
-            x: 0,
-            y: 0,
+            x: coreTile.x,
+            y: coreTile.y,
             height: 12,
             levels: this.gameState.baseLevel,
             material: 'blueBlock'

@@ -92,9 +92,9 @@ body, html {
     inset: 0;
     z-index: 12;
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: center;
-    padding-top: 66vh;
+    padding-bottom: clamp(72px, 18vh, 190px);
     box-sizing: border-box;
     pointer-events: none;
     opacity: 1;
