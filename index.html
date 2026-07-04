@@ -37,31 +37,37 @@
     </div>
 
     <section id="hud" aria-label="Base status">
-        <div class="hud-panel resources-panel">
-            <div class="resource-counter">
-                <svg class="resource-glyph energy-glyph" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M13.8 2.5 5.8 13h5.4l-1 8.5 8-11h-5.3Z"></path>
-                </svg>
-                <div class="resource-value">
-                    <strong id="energy-value">0</strong>
-                    <small id="energy-rate">+0/s</small>
+        <div class="hud-panel status-panel">
+            <div class="status-metrics">
+                <div class="resource-counter">
+                    <svg class="resource-glyph energy-glyph" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M13.8 2.5 5.8 13h5.4l-1 8.5 8-11h-5.3Z"></path>
+                    </svg>
+                    <div class="resource-value">
+                        <strong id="energy-value">0</strong>
+                        <small id="energy-rate">+0/s</small>
+                    </div>
+                </div>
+                <div class="resource-counter research-counter">
+                    <svg class="resource-glyph research-glyph" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="2.2"></circle>
+                        <ellipse cx="12" cy="12" rx="8.2" ry="3.2"></ellipse>
+                        <ellipse cx="12" cy="12" rx="8.2" ry="3.2" transform="rotate(60 12 12)"></ellipse>
+                        <ellipse cx="12" cy="12" rx="8.2" ry="3.2" transform="rotate(-60 12 12)"></ellipse>
+                    </svg>
+                    <div class="resource-value">
+                        <strong id="research-value">0</strong>
+                        <small id="research-rate">+0/s</small>
+                    </div>
+                </div>
+                <div class="progress-content">
+                    <div class="progress-header">
+                        <small id="base-xp">0 / 0 XP</small>
+                        <strong id="base-level">1</strong>
+                    </div>
+                    <div class="xp-track"><div id="xp-fill"></div></div>
                 </div>
             </div>
-            <div class="resource-counter research-counter">
-                <svg class="resource-glyph research-glyph" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="12" r="2.2"></circle>
-                    <ellipse cx="12" cy="12" rx="8.2" ry="3.2"></ellipse>
-                    <ellipse cx="12" cy="12" rx="8.2" ry="3.2" transform="rotate(60 12 12)"></ellipse>
-                    <ellipse cx="12" cy="12" rx="8.2" ry="3.2" transform="rotate(-60 12 12)"></ellipse>
-                </svg>
-                <div class="resource-value">
-                    <strong id="research-value">0</strong>
-                    <small id="research-rate">+0/s</small>
-                </div>
-            </div>
-        </div>
-
-        <div class="hud-panel progress-panel">
             <button id="center-button" class="hud-button home-button" type="button" title="Return to Blue Core" aria-label="Return to Blue Core">
                 <svg viewBox="0 0 32 32" aria-hidden="true">
                     <path class="core-top" d="M16 3 28 9 16 15 4 9Z"></path>
@@ -71,13 +77,6 @@
                     <path class="core-line" d="M4 9 16 15 28 9M16 15v12"></path>
                 </svg>
             </button>
-            <div class="progress-content">
-                <div class="progress-header">
-                    <small id="base-xp">0 / 0 XP</small>
-                    <strong id="base-level">1</strong>
-                </div>
-                <div class="xp-track"><div id="xp-fill"></div></div>
-            </div>
         </div>
     </section>
 

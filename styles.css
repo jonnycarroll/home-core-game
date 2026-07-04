@@ -221,13 +221,10 @@ body, html {
 
 #hud {
     position: absolute;
-    right: 20px;
     bottom: 20px;
-    left: 20px;
+    left: 50%;
     z-index: 10;
-    display: flex;
-    align-items: stretch;
-    gap: 8px;
+    transform: translateX(-50%);
     pointer-events: none;
 }
 
@@ -257,12 +254,19 @@ body, html {
     pointer-events: auto;
 }
 
-.resources-panel {
+.status-panel {
     display: grid;
-    grid-template-columns: minmax(92px, 1fr) minmax(104px, 1fr);
+    grid-template-columns: minmax(0, 1fr) 48px;
     align-items: center;
     gap: 12px;
-    width: 310px;
+    width: auto;
+}
+
+.status-metrics {
+    display: grid;
+    grid-template-columns: 104px 116px 190px;
+    align-items: center;
+    gap: 12px;
 }
 
 .resource-counter {
@@ -276,17 +280,7 @@ body, html {
     min-width: 0;
 }
 
-.progress-panel {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 180px;
-}
-
 .progress-content {
-    flex: 1;
     min-width: 0;
 }
 
@@ -422,14 +416,14 @@ body, html {
     pointer-events: auto;
 }
 
-.progress-panel .home-button {
+.status-panel .home-button {
     flex: 0 0 auto;
     width: 48px;
     height: 48px;
     box-shadow: none;
 }
 
-.progress-panel .home-button svg {
+.status-panel .home-button svg {
     width: 30px;
     height: 30px;
 }
@@ -548,10 +542,10 @@ body, html {
 
 @media (max-width: 760px) {
     #hud {
-        right: 10px;
         bottom: 16px;
-        left: 10px;
-        gap: 6px;
+        left: 50%;
+        width: calc(100vw - 20px);
+        max-width: max-content;
     }
 
     #side-panel {
@@ -576,14 +570,14 @@ body, html {
         height: 30px;
     }
 
-    .resources-panel {
-        grid-template-columns: minmax(82px, 1fr) minmax(94px, 1fr);
-        gap: 8px;
-        width: 232px;
+    .status-panel {
+        grid-template-columns: minmax(0, 1fr) 48px;
+        width: 100%;
     }
 
-    .progress-panel {
-        min-width: 128px;
+    .status-metrics {
+        grid-template-columns: minmax(82px, 1fr) minmax(94px, 1fr) minmax(128px, 1.2fr);
+        gap: 8px;
     }
 
     .hud-panel {
@@ -596,13 +590,12 @@ body, html {
 }
 
 @media (max-width: 560px) {
-    #hud {
-        flex-wrap: wrap;
+    .status-metrics {
+        grid-template-columns: minmax(82px, 1fr) minmax(94px, 1fr);
     }
 
-    .progress-panel {
-        flex-basis: 100%;
-        order: 5;
+    .progress-content {
+        grid-column: 1 / -1;
     }
 }
 
@@ -612,9 +605,8 @@ body, html {
         height: 50px;
     }
 
-    .resources-panel {
+    .status-metrics {
         grid-template-columns: minmax(74px, 1fr) minmax(84px, 1fr);
-        width: 204px;
     }
 
     .resource-glyph {
