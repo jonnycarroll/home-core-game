@@ -73,6 +73,7 @@ class IsoGrid {
             baseLevel: document.getElementById('base-level'),
             baseXp: document.getElementById('base-xp'),
             xpFill: document.getElementById('xp-fill'),
+            sidePanel: document.getElementById('side-panel'),
             tileTitle: document.getElementById('tile-title'),
             tileDetails: document.getElementById('tile-details'),
             tileAction: document.getElementById('tile-action'),
@@ -573,7 +574,11 @@ class IsoGrid {
 
     getHoverAlphaForTile(x, y) {
         const animation = this.hoverAnimations.find((entry) => entry.tile.x === x && entry.tile.y === y);
-        return animation ? animation.alpha : 0;
+        const selectedAlpha = this.gameStarted && this.gameState.selectedTile.x === x && this.gameState.selectedTile.y === y
+            ? 0.45
+            : 0;
+
+        return Math.max(animation ? animation.alpha : 0, selectedAlpha);
     }
 
     stopCenterAnimation() {
@@ -690,6 +695,11 @@ class IsoGrid {
         this.drawSceneItems(startX, endX, startY, endY);
         this.drawLevelUpMarker();
         this.drawCenterDirectionMarker();
+
+        if (this.gameStarted && this.dom) {
+            const inspected = this.getInspectedTile();
+            this.updateTilePanelPosition(this.gameState.getTileDetails(inspected.x, inspected.y));
+        }
     }
 
     drawCenterDirectionMarker() {
@@ -955,6 +965,7 @@ class IsoGrid {
         this.dom.xpFill.style.width = `${Math.min(this.gameState.baseXp / xpRequired, 1) * 100}%`;
         this.dom.centerButton.classList.toggle('level-ready', this.gameStarted && this.gameState.canLevelUpBase());
         this.updateSelectedPanel(selected);
+        this.updateTilePanelPosition(selected);
         this.updateTechTree();
     }
 
@@ -996,6 +1007,40 @@ class IsoGrid {
             this.dom.tileAction.textContent = selected.isClaimed ? 'Claimed' : 'Select adjacent frontier';
             this.dom.tileAction.disabled = true;
         }
+    }
+
+    updateTilePanelPosition(selected) {
+        const panel = this.dom.sidePanel;
+        if (!panel) {
+            return;
+        }
+
+        if (!this.gameStarted || this.viewportWidth <= 760) {
+            panel.style.left = '';
+            panel.style.top = '';
+            panel.style.right = '';
+            panel.style.transform = '';
+            return;
+        }
+
+        const screenPos = this.getTileScreenPosition(selected.x, selected.y);
+        const panelWidth = panel.offsetWidth || 220;
+        const panelHeight = panel.offsetHeight || 120;
+        const margin = 14;
+        const hudClearance = 118;
+        const minX = margin;
+        const maxX = this.viewportWidth - panelWidth - margin;
+        const minY = margin;
+        const maxY = this.viewportHeight - panelHeight - hudClearance;
+        const preferredX = screenPos.x + this.tileWidth / 2 + 4;
+        const preferredY = screenPos.y - panelHeight - this.tileHeight / 2 - 4;
+        const x = Math.max(minX, Math.min(preferredX, maxX));
+        const y = Math.max(minY, Math.min(preferredY, Math.max(minY, maxY)));
+
+        panel.style.left = `${x}px`;
+        panel.style.top = `${y}px`;
+        panel.style.right = 'auto';
+        panel.style.transform = 'none';
     }
 
     getResourceBenefitText(resource, isClaimed) {

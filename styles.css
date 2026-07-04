@@ -357,9 +357,10 @@ body, html {
 #side-panel {
     top: 16px;
     left: 16px;
-    width: 280px;
+    width: 220px;
     border-radius: 6px;
-    padding: 12px;
+    padding: 9px;
+    transition: opacity 160ms ease, visibility 160ms ease, transform 120ms ease;
 }
 
 #selected-panel {
@@ -369,22 +370,22 @@ body, html {
 #tile-title,
 #tech-panel h2 {
     margin: 0;
-    font-size: 16px;
+    font-size: 14px;
     letter-spacing: 0;
 }
 
 #tile-details {
-    min-height: 58px;
-    margin: 8px 0 10px;
-    font-size: 13px;
-    line-height: 1.45;
+    min-height: 0;
+    margin: 5px 0 8px;
+    font-size: 12px;
+    line-height: 1.35;
 }
 
 #tile-action,
 .tech-button,
 #resume-run {
     width: 100%;
-    min-height: 36px;
+    min-height: 32px;
     border: 1px solid var(--color-control-border);
     border-radius: 4px;
     background: var(--color-control);
@@ -558,6 +559,8 @@ body, html {
         left: 10px;
         bottom: auto;
         width: min(280px, calc(100vw - 62px));
+        padding: 10px;
+        transform: none;
     }
 
     #theme-controls {
