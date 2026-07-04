@@ -13,6 +13,7 @@ A small browser-based idle/exploration builder built with plain HTML, CSS, and J
 - Base XP from production, Home Core level-ups, and expanding reveal radius
 - Three-branch Research skill tree for Expansion, Production, and Surveying
 - HUD for resources, rates, Base XP, selected tile details, and skill purchases
+- Tokenized light/dark appearance that follows system preferences or a saved choice
 - Blue viewport-edge marker and Home button that point back to the Home Core
 - Device-pixel-ratio aware canvas rendering for sharper high-DPI displays
 - Small scene/material/rendering modules for tile and object layout
@@ -40,6 +41,7 @@ npm test
 ```text
 index.html    Browser entrypoint
 styles.css    Full-screen canvas, HUD, and panel styles
+appearance.js Theme preference, UI tokens, and canvas color tokens
 game-state.js Idle builder rules, state, production, reveal, and skills
 iso-math.js   Isometric projection, inverse projection, and tile hit testing
 materials.js  Render material palette for isometric objects

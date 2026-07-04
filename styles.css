@@ -1,12 +1,68 @@
+:root {
+    --color-page: #050607;
+    --color-text: #f4f7fb;
+    --color-muted: #aebbc5;
+    --color-panel: rgba(7, 11, 14, 0.82);
+    --color-panel-border: rgba(190, 218, 228, 0.22);
+    --color-panel-divider: rgba(190, 218, 228, 0.18);
+    --color-panel-shadow: rgba(0, 0, 0, 0.28);
+    --color-control: rgba(19, 32, 39, 0.9);
+    --color-control-hover: rgba(24, 45, 62, 0.92);
+    --color-control-border: rgba(176, 209, 224, 0.34);
+    --color-control-strong-border: rgba(180, 224, 255, 0.52);
+    --color-control-disabled: rgba(18, 22, 25, 0.8);
+    --color-text-disabled: #77838c;
+    --color-progress-track: rgba(255, 255, 255, 0.1);
+    --color-progress-fill: #65d6a5;
+}
+
+:root[data-theme="light"] {
+    --color-page: #e7edf0;
+    --color-text: #102027;
+    --color-muted: #50626b;
+    --color-panel: rgba(248, 252, 253, 0.86);
+    --color-panel-border: rgba(76, 104, 116, 0.22);
+    --color-panel-divider: rgba(76, 104, 116, 0.18);
+    --color-panel-shadow: rgba(46, 66, 75, 0.18);
+    --color-control: rgba(255, 255, 255, 0.86);
+    --color-control-hover: rgba(229, 241, 246, 0.96);
+    --color-control-border: rgba(55, 88, 104, 0.28);
+    --color-control-strong-border: rgba(36, 116, 154, 0.4);
+    --color-control-disabled: rgba(220, 228, 232, 0.86);
+    --color-text-disabled: #78878e;
+    --color-progress-track: rgba(16, 32, 39, 0.12);
+    --color-progress-fill: #209866;
+}
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme]) {
+        --color-page: #e7edf0;
+        --color-text: #102027;
+        --color-muted: #50626b;
+        --color-panel: rgba(248, 252, 253, 0.86);
+        --color-panel-border: rgba(76, 104, 116, 0.22);
+        --color-panel-divider: rgba(76, 104, 116, 0.18);
+        --color-panel-shadow: rgba(46, 66, 75, 0.18);
+        --color-control: rgba(255, 255, 255, 0.86);
+        --color-control-hover: rgba(229, 241, 246, 0.96);
+        --color-control-border: rgba(55, 88, 104, 0.28);
+        --color-control-strong-border: rgba(36, 116, 154, 0.4);
+        --color-control-disabled: rgba(220, 228, 232, 0.86);
+        --color-text-disabled: #78878e;
+        --color-progress-track: rgba(16, 32, 39, 0.12);
+        --color-progress-fill: #209866;
+    }
+}
+
 body, html {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #050607;
+    background-color: var(--color-page);
     position: relative;
-    color: #f4f7fb;
+    color: var(--color-text);
     font-family: Arial, sans-serif;
 }
 
@@ -22,25 +78,25 @@ body, html {
     right: 20px;
     width: 52px;
     height: 36px;
-    background-color: rgba(8, 14, 20, 0.84);
-    color: #f4f7fb;
-    border: 1px solid rgba(180, 224, 255, 0.52);
+    background-color: var(--color-panel);
+    color: var(--color-text);
+    border: 1px solid var(--color-control-strong-border);
     border-radius: 4px;
     cursor: pointer;
     z-index: 10;
 }
 
 #center-button:hover {
-    background-color: rgba(24, 45, 62, 0.92);
+    background-color: var(--color-control-hover);
 }
 
 #hud,
 #side-panel {
     position: absolute;
     z-index: 10;
-    background: rgba(7, 11, 14, 0.82);
-    border: 1px solid rgba(190, 218, 228, 0.22);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    background: var(--color-panel);
+    border: 1px solid var(--color-panel-border);
+    box-shadow: 0 12px 28px var(--color-panel-shadow);
     backdrop-filter: blur(8px);
 }
 
@@ -66,7 +122,7 @@ body, html {
 .hud-grid small,
 #side-panel small,
 #tile-details {
-    color: #aebbc5;
+    color: var(--color-muted);
 }
 
 .label {
@@ -92,14 +148,36 @@ body, html {
     height: 5px;
     margin-top: 10px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-progress-track);
     border-radius: 999px;
 }
 
 #xp-fill {
     width: 0%;
     height: 100%;
-    background: #65d6a5;
+    background: var(--color-progress-fill);
+}
+
+.hud-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.theme-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-muted);
+    font-size: 12px;
+}
+
+#theme-select {
+    height: 28px;
+    color: var(--color-text);
+    background: var(--color-control);
+    border: 1px solid var(--color-control-border);
+    border-radius: 4px;
 }
 
 #side-panel {
@@ -112,7 +190,7 @@ body, html {
 
 #selected-panel {
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(190, 218, 228, 0.18);
+    border-bottom: 1px solid var(--color-panel-divider);
 }
 
 #tile-title,
@@ -133,18 +211,18 @@ body, html {
 .skill-button {
     width: 100%;
     min-height: 36px;
-    border: 1px solid rgba(176, 209, 224, 0.34);
+    border: 1px solid var(--color-control-border);
     border-radius: 4px;
-    background: rgba(19, 32, 39, 0.9);
-    color: #f4f7fb;
+    background: var(--color-control);
+    color: var(--color-text);
     cursor: pointer;
 }
 
 #tile-action:disabled,
 .skill-button:disabled {
-    color: #77838c;
+    color: var(--color-text-disabled);
     cursor: default;
-    background: rgba(18, 22, 25, 0.8);
+    background: var(--color-control-disabled);
 }
 
 #skills-panel {

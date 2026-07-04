@@ -21,6 +21,7 @@ class IsoGrid {
         );
         this.gameState = new IdleGameState();
         this.scene = IsoScene.createDefault();
+        this.themeTokens = this.getThemeTokens();
         this.offsetX = 0;
         this.offsetY = 0;
         this.isDragging = false;
@@ -47,6 +48,7 @@ class IsoGrid {
         window.addEventListener('resize', () => this.resizeCanvas());
         
         this.cacheDomElements();
+        this.setupAppearance();
 
         // Setup event listeners
         this.setupEventListeners();
@@ -71,11 +73,71 @@ class IsoGrid {
             tileTitle: document.getElementById('tile-title'),
             tileDetails: document.getElementById('tile-details'),
             tileAction: document.getElementById('tile-action'),
+            themeSelect: document.getElementById('theme-select'),
             skillButtons: Array.from(document.querySelectorAll('.skill-button')),
             skillExpansion: document.getElementById('skill-expansion'),
             skillProduction: document.getElementById('skill-production'),
             skillSurveying: document.getElementById('skill-surveying')
         };
+    }
+
+    setupAppearance() {
+        this.applyThemeTokens(this.themeTokens);
+
+        if (window.AppAppearance) {
+            window.AppAppearance.initControls();
+        }
+
+        window.addEventListener('appearancechange', (event) => {
+            this.applyThemeTokens(event.detail.tokens);
+            this.resourceIconCache.clear();
+            this.requestRender();
+        });
+    }
+
+    getThemeTokens() {
+        if (window.AppAppearance) {
+            return window.AppAppearance.getCanvasTokens();
+        }
+
+        return {
+            canvasBackground: '#050607',
+            tileStroke: 'rgba(0, 0, 0, 0.75)',
+            tileDefault: 'rgba(210, 214, 220, 0.08)',
+            tileUnrevealed: { r: 10, g: 12, b: 13, a: 0.88 },
+            tileHome: { r: 38, g: 170, b: 218, a: 0.92 },
+            tileClaimed: { r: 45, g: 121, b: 98, a: 0.66 },
+            tileFrontier: { r: 182, g: 142, b: 62, a: 0.52 },
+            tileRevealed: { r: 78, g: 86, b: 90, a: 0.18 },
+            hoverFallback: 'rgba(255, 255, 255, ',
+            homeMarkerFill: 'rgba(0, 160, 255, 0.95)',
+            homeMarkerStroke: 'rgba(220, 245, 255, 0.9)',
+            shadowClaimed: 'rgba(0, 0, 0, 0.34)',
+            shadowOpen: 'rgba(0, 0, 0, 0.2)',
+            energyClaimed: '#9df7bd',
+            energyOpen: '#5ede91',
+            energyStroke: '#041f13',
+            energyHighlight: 'rgba(245, 255, 247, 0.68)',
+            researchClaimed: '#f2cf67',
+            researchOpen: '#d8a944',
+            researchCoreClaimed: '#fff0a6',
+            researchCoreOpen: '#e2c15d',
+            researchStroke: '#32250a',
+            energyPipClaimed: '#c8ffd8',
+            energyPipOpen: '#86eeb0',
+            researchPipClaimed: '#fff0a6',
+            researchPipOpen: '#e0c16a',
+            pipStroke: 'rgba(4, 8, 9, 0.84)',
+            materials: IsoMaterials
+        };
+    }
+
+    applyThemeTokens(tokens) {
+        this.themeTokens = tokens;
+        this.materials = tokens.materials;
+        this.tileRenderer.defaultFillStyle = tokens.tileDefault;
+        this.tileRenderer.strokeStyle = tokens.tileStroke;
+        this.objectRenderer.materials = tokens.materials;
     }
     
     resizeCanvas() {
@@ -464,7 +526,7 @@ class IsoGrid {
     
     render() {
         // Clear canvas behind the tiled surface.
-        this.ctx.fillStyle = '#050607';
+        this.ctx.fillStyle = this.themeTokens.canvasBackground;
         this.ctx.fillRect(0, 0, this.viewportWidth, this.viewportHeight);
         
         const { startX, endX, startY, endY } = this.getVisibleTiles();
@@ -499,8 +561,8 @@ class IsoGrid {
         }
 
         this.ctx.save();
-        this.ctx.fillStyle = 'rgba(0, 160, 255, 0.95)';
-        this.ctx.strokeStyle = 'rgba(220, 245, 255, 0.9)';
+        this.ctx.fillStyle = this.themeTokens.homeMarkerFill;
+        this.ctx.strokeStyle = this.themeTokens.homeMarkerStroke;
         this.ctx.lineWidth = 2;
         this.ctx.beginPath();
         this.ctx.arc(markerPoint.x, markerPoint.y, 7, 0, Math.PI * 2);
@@ -554,22 +616,22 @@ class IsoGrid {
 
     getTileBaseColor(x, y) {
         if (!this.gameState.isRevealed(x, y)) {
-            return { r: 10, g: 12, b: 13, a: 0.88 };
+            return this.themeTokens.tileUnrevealed;
         }
 
         if (this.gameState.isHomeCore(x, y)) {
-            return { r: 38, g: 170, b: 218, a: 0.92 };
+            return this.themeTokens.tileHome;
         }
 
         if (this.gameState.isClaimed(x, y)) {
-            return { r: 45, g: 121, b: 98, a: 0.66 };
+            return this.themeTokens.tileClaimed;
         }
 
         if (this.gameState.canClaim(x, y)) {
-            return { r: 182, g: 142, b: 62, a: 0.52 };
+            return this.themeTokens.tileFrontier;
         }
 
-        return { r: 78, g: 86, b: 90, a: 0.18 };
+        return this.themeTokens.tileRevealed;
     }
 
     getBaseFillStyle(baseColor) {
@@ -591,7 +653,7 @@ class IsoGrid {
             return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
 
-        return `rgba(255, 255, 255, ${hoverAlpha * 0.7})`;
+        return `${this.themeTokens.hoverFallback}${hoverAlpha * 0.7})`;
     }
     
     drawTile(x, y) {
@@ -690,7 +752,7 @@ class IsoGrid {
     drawResourceShadow(x, y, claimed) {
         this.ctx.beginPath();
         this.ctx.ellipse(x, y, claimed ? 9 : 7, claimed ? 4 : 3, 0, 0, Math.PI * 2);
-        this.ctx.fillStyle = claimed ? 'rgba(0, 0, 0, 0.34)' : 'rgba(0, 0, 0, 0.2)';
+        this.ctx.fillStyle = claimed ? this.themeTokens.shadowClaimed : this.themeTokens.shadowOpen;
         this.ctx.fill();
     }
 
@@ -705,9 +767,9 @@ class IsoGrid {
         this.ctx.lineTo(x + size * 0.64, y - size * 0.22);
         this.ctx.lineTo(x + size * 0.1, y - size * 0.22);
         this.ctx.closePath();
-        this.ctx.fillStyle = claimed ? '#9df7bd' : '#5ede91';
+        this.ctx.fillStyle = claimed ? this.themeTokens.energyClaimed : this.themeTokens.energyOpen;
         this.ctx.fill();
-        this.ctx.strokeStyle = '#041f13';
+        this.ctx.strokeStyle = this.themeTokens.energyStroke;
         this.ctx.lineJoin = 'round';
         this.ctx.lineWidth = 2.4;
         this.ctx.stroke();
@@ -716,7 +778,7 @@ class IsoGrid {
         this.ctx.moveTo(x + size * 0.08, y - size * 0.68);
         this.ctx.lineTo(x - size * 0.24, y - size * 0.08);
         this.ctx.lineTo(x + size * 0.08, y - size * 0.08);
-        this.ctx.strokeStyle = 'rgba(245, 255, 247, 0.68)';
+        this.ctx.strokeStyle = this.themeTokens.energyHighlight;
         this.ctx.lineWidth = 1.8;
         this.ctx.stroke();
     }
@@ -724,7 +786,7 @@ class IsoGrid {
     drawAtomIcon(x, y, tier, claimed) {
         const radius = 5 + tier * 1.6;
 
-        this.ctx.strokeStyle = claimed ? '#f2cf67' : '#d8a944';
+        this.ctx.strokeStyle = claimed ? this.themeTokens.researchClaimed : this.themeTokens.researchOpen;
         this.ctx.lineWidth = 1.4 + tier * 0.18;
         this.drawAtomOrbit(x, y, radius, 0);
         this.drawAtomOrbit(x, y, radius, Math.PI / 3);
@@ -732,9 +794,9 @@ class IsoGrid {
 
         this.ctx.beginPath();
         this.ctx.arc(x, y, 3, 0, Math.PI * 2);
-        this.ctx.fillStyle = claimed ? '#fff0a6' : '#e2c15d';
+        this.ctx.fillStyle = claimed ? this.themeTokens.researchCoreClaimed : this.themeTokens.researchCoreOpen;
         this.ctx.fill();
-        this.ctx.strokeStyle = '#32250a';
+        this.ctx.strokeStyle = this.themeTokens.researchStroke;
         this.ctx.lineWidth = 1.5;
         this.ctx.stroke();
     }
@@ -749,10 +811,10 @@ class IsoGrid {
             this.ctx.beginPath();
             this.ctx.arc(startX + index * gap, y, pipRadius, 0, Math.PI * 2);
             this.ctx.fillStyle = resourceType === 'energy'
-                ? (claimed ? '#c8ffd8' : '#86eeb0')
-                : (claimed ? '#fff0a6' : '#e0c16a');
+                ? (claimed ? this.themeTokens.energyPipClaimed : this.themeTokens.energyPipOpen)
+                : (claimed ? this.themeTokens.researchPipClaimed : this.themeTokens.researchPipOpen);
             this.ctx.fill();
-            this.ctx.strokeStyle = 'rgba(4, 8, 9, 0.84)';
+            this.ctx.strokeStyle = this.themeTokens.pipStroke;
             this.ctx.lineWidth = 1;
             this.ctx.stroke();
         }
