@@ -44,6 +44,7 @@ npm test
 index.html    Browser entrypoint
 styles.css    Full-screen canvas, HUD, and panel styles
 appearance.js Theme preference, UI tokens, and canvas color tokens
+canvas-tokens.js Shared canvas theme/material tokens
 game-state.js Idle builder rules, state, production, reveal, and tech upgrades
 iso-math.js   Isometric projection, inverse projection, and tile hit testing
 materials.js  Render material palette for isometric objects

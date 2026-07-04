@@ -108,39 +108,7 @@ class IsoGrid {
             return window.AppAppearance.getCanvasTokens();
         }
 
-        return {
-            canvasBackground: '#050607',
-            tileStroke: 'rgba(0, 0, 0, 0.75)',
-            tileDefault: 'rgba(210, 214, 220, 0.08)',
-            tileUnrevealed: { r: 10, g: 12, b: 13, a: 0.88 },
-            tileHome: { r: 38, g: 170, b: 218, a: 0.92 },
-            tileClaimed: { r: 45, g: 121, b: 98, a: 0.66 },
-            tileFrontier: { r: 182, g: 142, b: 62, a: 0.52 },
-            tileRevealed: { r: 105, g: 116, b: 122, a: 0.36 },
-            hoverFallback: 'rgba(255, 255, 255, ',
-            homeMarkerFill: 'rgba(0, 160, 255, 0.95)',
-            homeMarkerStroke: 'rgba(220, 245, 255, 0.9)',
-            levelUpMarkerFill: '#ffd45c',
-            levelUpMarkerStroke: '#5c3a00',
-            levelUpMarkerGlow: 'rgba(255, 196, 66, 0.34)',
-            shadowClaimed: 'rgba(0, 0, 0, 0.34)',
-            shadowOpen: 'rgba(0, 0, 0, 0.2)',
-            energyClaimed: '#9df7bd',
-            energyOpen: '#5ede91',
-            energyStroke: '#041f13',
-            energyHighlight: 'rgba(245, 255, 247, 0.68)',
-            researchClaimed: '#f2cf67',
-            researchOpen: '#d8a944',
-            researchCoreClaimed: '#fff0a6',
-            researchCoreOpen: '#e2c15d',
-            researchStroke: '#32250a',
-            energyPipClaimed: '#c8ffd8',
-            energyPipOpen: '#86eeb0',
-            researchPipClaimed: '#fff0a6',
-            researchPipOpen: '#e0c16a',
-            pipStroke: 'rgba(4, 8, 9, 0.84)',
-            materials: IsoMaterials
-        };
+        return window.CanvasThemeTokens.dark;
     }
 
     applyThemeTokens(tokens) {
