@@ -455,6 +455,11 @@ class IsoGrid {
     }
 
     getTileAtPosition(x, y) {
+        const objectTile = this.getObjectTileAtPosition(x, y);
+        if (objectTile) {
+            return objectTile;
+        }
+
         const approx = this.getGridCoordsFromScreen(x, y);
         const baseX = Math.floor(approx.x);
         const baseY = Math.floor(approx.y);
@@ -475,6 +480,34 @@ class IsoGrid {
             x: Math.round(approx.x),
             y: Math.round(approx.y)
         };
+    }
+
+    getObjectTileAtPosition(x, y) {
+        if (!this.gameStarted) {
+            return null;
+        }
+
+        const point = { x, y };
+        const viewport = {
+            offsetX: this.offsetX,
+            offsetY: this.offsetY,
+            width: this.viewportWidth,
+            height: this.viewportHeight
+        };
+        const objects = IsoObjectLayout.sortObjects(this.getSceneObjects()).reverse();
+
+        for (const object of objects) {
+            if (!this.objectRenderer.isObjectNearViewport(object, viewport)) {
+                continue;
+            }
+
+            const screenPos = this.getTileScreenPosition(object.x, object.y);
+            if (object.type === 'cuboid' && IsoObjectLayout.isPointInCuboid(object, screenPos, point, this.tileWidth, this.tileHeight)) {
+                return { x: object.x, y: object.y };
+            }
+        }
+
+        return null;
     }
 
     updateHoveredTile(tile) {
@@ -633,9 +666,8 @@ class IsoGrid {
             }
         }
 
-        this.drawObjects();
+        this.drawSceneItems(startX, endX, startY, endY);
         this.drawLevelUpMarker();
-        this.drawTileOverlays(startX, endX, startY, endY);
         this.drawCenterDirectionMarker();
     }
 
@@ -773,11 +805,12 @@ class IsoGrid {
         }, fillStyle);
     }
 
-    drawObjects() {
+    getSceneObjects() {
         const coreTile = this.gameStarted
             ? { x: 0, y: 0 }
             : this.corePlacementTile;
-        const objects = [{
+
+        return [{
             type: 'cuboid',
             x: coreTile.x,
             y: coreTile.y,
@@ -785,13 +818,6 @@ class IsoGrid {
             levels: this.gameState.baseLevel,
             material: 'blueBlock'
         }];
-
-        this.objectRenderer.drawObjects(objects, {
-            offsetX: this.offsetX,
-            offsetY: this.offsetY,
-            width: this.viewportWidth,
-            height: this.viewportHeight
-        });
     }
 
     getCoreLevelHeight() {
@@ -829,31 +855,65 @@ class IsoGrid {
         this.ctx.restore();
     }
 
-    drawTileOverlays(startX, endX, startY, endY) {
+    drawSceneItems(startX, endX, startY, endY) {
+        const viewport = {
+            offsetX: this.offsetX,
+            offsetY: this.offsetY,
+            width: this.viewportWidth,
+            height: this.viewportHeight
+        };
+        const items = this.getSceneObjects()
+            .filter((object) => this.objectRenderer.isObjectNearViewport(object, viewport))
+            .map((object) => ({
+                kind: 'object',
+                x: object.x,
+                y: object.y,
+                object
+            }));
+
         for (let y = startY; y < endY; y++) {
             for (let x = startX; x < endX; x++) {
-                this.drawResourceMarker(x, y);
+                const marker = this.getResourceMarker(x, y);
+                if (marker) {
+                    items.push(marker);
+                }
+            }
+        }
+
+        for (const item of IsoObjectLayout.sortSceneItems(items)) {
+            if (item.kind === 'object') {
+                this.objectRenderer.drawObject(item.object, this.offsetX, this.offsetY);
+            } else if (item.kind === 'glyph') {
+                this.glyphRenderer.drawResourceMarker(this.ctx, item.resource, item.screenX, item.screenY, item.claimed);
             }
         }
     }
 
-    drawResourceMarker(x, y) {
+    getResourceMarker(x, y) {
         if (!this.gameStarted) {
-            return;
+            return null;
         }
 
         if (!this.gameState.isRevealed(x, y)) {
-            return;
+            return null;
         }
 
         const resource = IdleGameState.getResourceAt(x, y);
         if (!resource) {
-            return;
+            return null;
         }
 
         const screenPos = this.getTileScreenPosition(x, y);
-        const claimed = this.gameState.isClaimed(x, y);
-        this.glyphRenderer.drawResourceMarker(this.ctx, resource, screenPos.x, screenPos.y, claimed);
+
+        return {
+            kind: 'glyph',
+            x,
+            y,
+            resource,
+            screenX: screenPos.x,
+            screenY: screenPos.y,
+            claimed: this.gameState.isClaimed(x, y)
+        };
     }
 
     updateHud() {

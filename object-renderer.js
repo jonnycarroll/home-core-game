@@ -16,9 +16,13 @@ class IsoObjectRenderer {
             .filter((object) => this.isObjectNearViewport(object, viewport));
 
         for (const object of visibleObjects) {
-            if (object.type === 'cuboid') {
-                this.drawCuboid(object, viewport.offsetX, viewport.offsetY);
-            }
+            this.drawObject(object, viewport.offsetX, viewport.offsetY);
+        }
+    }
+
+    drawObject(object, offsetX, offsetY) {
+        if (object.type === 'cuboid') {
+            this.drawCuboid(object, offsetX, offsetY);
         }
     }
 
