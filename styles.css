@@ -15,10 +15,10 @@
     --color-text-disabled: #77838c;
     --color-progress-track: rgba(255, 255, 255, 0.1);
     --color-progress-fill: #65d6a5;
-    --color-start-button: rgba(91, 255, 149, 0.16);
-    --color-start-button-hover: rgba(91, 255, 149, 0.26);
-    --color-start-button-border: rgba(129, 255, 174, 0.74);
-    --color-start-button-shadow: rgba(91, 255, 149, 0.24);
+    --color-start-button: rgba(38, 170, 218, 0.18);
+    --color-start-button-hover: rgba(38, 170, 218, 0.3);
+    --color-start-button-border: rgba(120, 220, 255, 0.74);
+    --color-start-button-shadow: rgba(38, 170, 218, 0.26);
 }
 
 :root[data-theme="light"] {
@@ -38,10 +38,10 @@
     --color-text-disabled: #78878e;
     --color-progress-track: rgba(16, 32, 39, 0.12);
     --color-progress-fill: #209866;
-    --color-start-button: rgba(38, 222, 105, 0.2);
-    --color-start-button-hover: rgba(38, 222, 105, 0.32);
-    --color-start-button-border: rgba(20, 171, 75, 0.56);
-    --color-start-button-shadow: rgba(38, 222, 105, 0.18);
+    --color-start-button: rgba(22, 136, 190, 0.22);
+    --color-start-button-hover: rgba(22, 136, 190, 0.34);
+    --color-start-button-border: rgba(17, 122, 184, 0.58);
+    --color-start-button-shadow: rgba(22, 136, 190, 0.2);
 }
 
 @media (prefers-color-scheme: light) {
@@ -62,10 +62,10 @@
         --color-text-disabled: #78878e;
         --color-progress-track: rgba(16, 32, 39, 0.12);
         --color-progress-fill: #209866;
-        --color-start-button: rgba(38, 222, 105, 0.2);
-        --color-start-button-hover: rgba(38, 222, 105, 0.32);
-        --color-start-button-border: rgba(20, 171, 75, 0.56);
-        --color-start-button-shadow: rgba(38, 222, 105, 0.18);
+        --color-start-button: rgba(22, 136, 190, 0.22);
+        --color-start-button-hover: rgba(22, 136, 190, 0.34);
+        --color-start-button-border: rgba(17, 122, 184, 0.58);
+        --color-start-button-shadow: rgba(22, 136, 190, 0.2);
     }
 }
 

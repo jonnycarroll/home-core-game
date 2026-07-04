@@ -43,7 +43,7 @@ const AppAppearance = (() => {
         canvasBackground: '#e7edf0',
         tileStroke: 'rgba(66, 85, 92, 0.34)',
         tileDefault: 'rgba(60, 79, 86, 0.1)',
-        tileUnrevealed: { r: 96, g: 108, b: 114, a: 0.68 },
+        tileUnrevealed: { r: 118, g: 130, b: 136, a: 0.62 },
         tileHome: { r: 22, g: 136, b: 190, a: 0.84 },
         tileClaimed: { r: 50, g: 143, b: 106, a: 0.56 },
         tileFrontier: { r: 205, g: 148, b: 45, a: 0.5 },
