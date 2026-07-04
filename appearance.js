@@ -116,16 +116,27 @@ const AppAppearance = (() => {
         apply(preference);
     }
 
+    function getNextPreference(preference = getStoredPreference()) {
+        const currentIndex = preferences.indexOf(preference);
+        return preferences[(currentIndex + 1) % preferences.length];
+    }
+
+    function updateToggleLabel(button, preference = getStoredPreference()) {
+        const label = `Theme: ${preference[0].toUpperCase()}${preference.slice(1)}`;
+        button.setAttribute('aria-label', label);
+        button.title = label;
+    }
+
     function initControls() {
-        const selector = document.getElementById('theme-select');
-        if (!selector) {
+        const button = document.getElementById('theme-toggle');
+        if (!button) {
             return;
         }
 
-        selector.value = getStoredPreference();
-        selector.addEventListener('change', () => setPreference(selector.value));
+        updateToggleLabel(button);
+        button.addEventListener('click', () => setPreference(getNextPreference()));
         window.addEventListener('appearancechange', (event) => {
-            selector.value = event.detail.preference;
+            updateToggleLabel(button, event.detail.preference);
         });
     }
 

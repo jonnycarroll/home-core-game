@@ -73,7 +73,6 @@ class IsoGrid {
             tileTitle: document.getElementById('tile-title'),
             tileDetails: document.getElementById('tile-details'),
             tileAction: document.getElementById('tile-action'),
-            themeSelect: document.getElementById('theme-select'),
             skillButtons: Array.from(document.querySelectorAll('.skill-button')),
             skillExpansion: document.getElementById('skill-expansion'),
             skillProduction: document.getElementById('skill-production'),

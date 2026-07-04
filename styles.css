@@ -72,22 +72,55 @@ body, html {
     height: 100%;
 }
 
-#center-button {
+#viewport-controls {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    width: 52px;
-    height: 36px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.icon-button {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
     background-color: var(--color-panel);
     color: var(--color-text);
     border: 1px solid var(--color-control-strong-border);
     border-radius: 4px;
     cursor: pointer;
-    z-index: 10;
 }
 
-#center-button:hover {
+.icon-button:hover {
     background-color: var(--color-control-hover);
+}
+
+.icon-button svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.icon-button circle {
+    fill: none;
+}
+
+.theme-icon {
+    display: none;
+}
+
+:root[data-theme-preference="system"] .theme-icon-system,
+:root[data-theme-preference="light"] .theme-icon-light,
+:root[data-theme-preference="dark"] .theme-icon-dark {
+    display: block;
 }
 
 #hud,
@@ -156,28 +189,6 @@ body, html {
     width: 0%;
     height: 100%;
     background: var(--color-progress-fill);
-}
-
-.hud-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 10px;
-}
-
-.theme-control {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--color-muted);
-    font-size: 12px;
-}
-
-#theme-select {
-    height: 28px;
-    color: var(--color-text);
-    background: var(--color-control);
-    border: 1px solid var(--color-control-border);
-    border-radius: 4px;
 }
 
 #side-panel {
@@ -254,7 +265,7 @@ body, html {
         width: auto;
     }
 
-    #center-button {
+    #viewport-controls {
         right: 10px;
         bottom: 16px;
     }

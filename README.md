@@ -61,7 +61,8 @@ tests/        Small Node-based regression tests
 - Hover tiles to inspect claim costs, connection state, and resource benefits.
 - Click a revealed adjacent tile to claim it when affordable.
 - Click the Home Core or selected-tile button to level up when Base XP is full.
-- Use `Home` to animate back to the Home Core.
+- Use the map-pin control to animate back to the Home Core.
+- Use the theme control to cycle between system, light, and dark appearance.
 
 ## Current Scope
 
